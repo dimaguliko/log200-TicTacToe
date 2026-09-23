@@ -10,7 +10,12 @@ class Board
 
     // Ne pas changer la signature de cette méthode
     public Board() {
-
+        board = new Mark[2][2];
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                board[i][j] = Mark.EMPTY;
+            }
+        }
     }
 
     // Place la pièce 'mark' sur le plateau, à la
