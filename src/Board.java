@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Stack;
 
 // IMPORTANT: Il ne faut pas changer la signature des méthodes
 // de cette classe, ni le nom de la classe.
@@ -8,6 +9,7 @@ class Board
 {
     private Mark[][] board;
     public ArrayList<Move> coupsPossibles;
+    public Stack<Move> coupsJoues;
 
     // Ne pas changer la signature de cette méthode
     public Board() {
@@ -27,7 +29,14 @@ class Board
     // Ne pas changer la signature de cette méthode
     public void play(Move m, Mark mark){
         board[m.getRow()][m.getCol()] = mark;
-        coupsPossibles.remove(new Move(m.getRow(), m.getCol()));
+        Move newMove = new Move(m.getRow(), m.getCol());
+        coupsPossibles.remove(newMove);
+        coupsJoues.push(newMove);
+
+    }
+
+    public void unplay(){
+        coupsJoues.pop();
     }
 
 

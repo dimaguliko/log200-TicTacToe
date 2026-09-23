@@ -13,10 +13,12 @@ class CPUPlayer
     // au début de votre MinMax ou Alpha Beta.
     private int numExploredNodes;
 
+    private Mark cpu;
+
     // Le constructeur reçoit en paramètre le
     // joueur MAX (X ou O)
     public CPUPlayer(Mark cpu){
-
+        this.cpu = cpu;
     }
 
     // Ne pas changer cette méthode
@@ -30,7 +32,8 @@ class CPUPlayer
     public ArrayList<Move> getNextMoveMinMax(Board board)
     {
         numExploredNodes = 0;
-
+        int val = miniMax(board, "MAX");
+        return
     }
 
     // Retourne la liste des coups possibles.  Cette liste contient
@@ -39,6 +42,37 @@ class CPUPlayer
     public ArrayList<Move> getNextMoveAB(Board board){
         numExploredNodes = 0;
 
+    }
+
+    public int miniMax(Board board, String joueur){
+        numExploredNodes++;
+        if(!winPresent || board.coupsPossibles.isEmpty()) {
+            return board.evaluate(feuille);
+        }
+
+        ArrayList<Move> coups = board.coupsPossibles();
+        int meilleur;
+        if(joueur.equals("MAX")){
+            meilleur = Integer.MIN_VALUE;
+
+            for(Move coup: coups){
+               board.play(coup, cpu);
+               int score = miniMax(board, "MIN");
+               board.unplay();
+               meilleur = Integer.max(meilleur, score);
+            }
+
+        } else {
+
+            meilleur = Integer.MAX_VALUE;
+
+            for(Move coup: coups){
+                board.play(coup, cpu);
+                int score = miniMax(board, "MAX");
+                board.unplay();
+                meilleur = Integer.min(meilleur, score);
+            }
+        }
     }
 
 }
