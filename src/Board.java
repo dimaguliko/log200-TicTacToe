@@ -7,13 +7,16 @@ import java.util.ArrayList;
 class Board
 {
     private Mark[][] board;
+    public ArrayList<Move> coupsPossibles;
 
     // Ne pas changer la signature de cette méthode
     public Board() {
+        coupsPossibles = new ArrayList<>();
         board = new Mark[2][2];
         for(int i = 0; i < board.length; i++){
             for(int j = 0; j < board[0].length; j++){
                 board[i][j] = Mark.EMPTY;
+                coupsPossibles.add(new Move(i, j));
             }
         }
     }
@@ -24,6 +27,7 @@ class Board
     // Ne pas changer la signature de cette méthode
     public void play(Move m, Mark mark){
         board[m.getRow()][m.getCol()] = mark;
+        coupsPossibles.remove(new Move(m.getRow(), m.getCol()));
     }
 
 
@@ -33,5 +37,9 @@ class Board
     // Ne pas changer la signature de cette méthode
     public int evaluate(Mark mark){
 
+    }
+
+    public ArrayList<Move> coupsPossibles(){
+        return coupsPossibles;
     }
 }
