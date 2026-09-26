@@ -1,24 +1,26 @@
 import java.util.ArrayList;
 
-// IMPORTANT: Il ne faut pas changer la signature des méthodes
+// IMPORTANT : Il ne faut pas changer la signature des méthodes
 // de cette classe, ni le nom de la classe.
 // Vous pouvez par contre ajouter d'autres méthodes (ça devrait 
-// être le cas)
+// être le cas).
 class CPUPlayer
 {
 
-    // Contient le nombre de noeuds visités (le nombre
-    // d'appel à la fonction MinMax ou Alpha Beta)
+    // Contient le nombre de nœuds visités (le nombre
+    // d'appels à la fonction MinMax ou Alpha Beta)
     // Normalement, la variable devrait être incrémentée
     // au début de votre MinMax ou Alpha Beta.
     private int numExploredNodes;
 
-    private Mark cpu;
+    private Mark mark;
+    private Mark markAdverse;
 
     // Le constructeur reçoit en paramètre le
-    // joueur MAX (X ou O)
-    public CPUPlayer(Mark cpu){
-        this.cpu = cpu;
+    // joueur MAX (X ou O).
+    public CPUPlayer(Mark mark){
+        this.mark = mark;
+        markAdverse = mark == Mark.X ? Mark.O : Mark.X;
     }
 
     // Ne pas changer cette méthode
@@ -27,7 +29,7 @@ class CPUPlayer
     }
 
     // Retourne la liste des coups possibles.  Cette liste contient
-    // plusieurs coups possibles si et seuleument si plusieurs coups
+    // plusieurs coups possibles si et seulement si plusieurs coups
     // ont le même score.
     public ArrayList<Move> getNextMoveMinMax(Board board)
     {
@@ -37,7 +39,7 @@ class CPUPlayer
     }
 
     // Retourne la liste des coups possibles.  Cette liste contient
-    // plusieurs coups possibles si et seuleument si plusieurs coups
+    // plusieurs coups possibles si et seulement si plusieurs coups
     // ont le même score.
     public ArrayList<Move> getNextMoveAB(Board board){
         numExploredNodes = 0;
@@ -46,17 +48,19 @@ class CPUPlayer
 
     public int miniMax(Board board, String joueur){
         numExploredNodes++;
-        if(!winPresent || board.coupsPossibles.isEmpty()) {
-            return board.evaluate(feuille);
+        int response = board.evaluate(mark);
+        if((response != 0) || board.coupsPossibles().isEmpty()) {
+            return response;
         }
 
         ArrayList<Move> coups = board.coupsPossibles();
         int meilleur;
+
         if(joueur.equals("MAX")){
             meilleur = Integer.MIN_VALUE;
 
             for(Move coup: coups){
-               board.play(coup, cpu);
+               board.play(coup, mark);
                int score = miniMax(board, "MIN");
                board.unplay();
                meilleur = Integer.max(meilleur, score);
@@ -65,14 +69,14 @@ class CPUPlayer
         } else {
 
             meilleur = Integer.MAX_VALUE;
-
             for(Move coup: coups){
-                board.play(coup, cpu);
+                board.play(coup, markAdverse);
                 int score = miniMax(board, "MAX");
                 board.unplay();
                 meilleur = Integer.min(meilleur, score);
             }
         }
-    }
 
+        return meilleur;
+    }
 }
