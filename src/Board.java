@@ -7,9 +7,9 @@ import java.util.Stack;
 // être le cas).
 class Board
 {
-    private Mark[][] board;
-    private ArrayList<Move> coupsPossibles;
-    private Stack<Move> coupsJoues;
+    private final Mark[][] board;
+    private final ArrayList<Move> coupsPossibles;
+    private final Stack<Move> coupsJoues;
 
     // Ne pas changer la signature de cette méthode
     public Board() {
@@ -30,9 +30,8 @@ class Board
     // Ne pas changer la signature de cette méthode
     public void play(Move m, Mark mark){
         board[m.getRow()][m.getCol()] = mark;
-        Move newMove = new Move(m.getRow(), m.getCol());
-        coupsPossibles.remove(newMove);
-        coupsJoues.push(newMove);
+        coupsPossibles.removeIf(coup -> coup.getRow() == m.getRow() && coup.getCol() == m.getCol());
+        coupsJoues.push(m);
     }
 
     public void unplay(){
